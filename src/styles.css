@@ -1,0 +1,231 @@
+/* src/styles.css */
+:root {
+    --primary: #0078a7;
+    --secondary: #e2725b;
+    --light: #f5f5f5;
+    --dark: #333;
+    --highlight: #ffdb58;
+    --success: #5cb85c;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --text-light: #ffffff;
+    --text-dark: #333333;
+    --bg-light: #ffffff;
+    --bg-dark: #121212;
+    --modal-bg-light: #ffffff;
+    --modal-bg-dark: #1e1e1e;
+    --card-bg-light: #ffffff;
+    --card-bg-dark: #2d2d2d;
+    --input-bg-light: #ffffff;
+    --input-bg-dark: #3d3d3d;
+    --border-light: #dee2e6;
+    --border-dark: #444;
+  }
+  
+  /* Styles communs */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Mode clair (par défaut) */
+  body {
+    background-color: var(--light);
+    color: var(--dark);
+  }
+  
+  /* Mode sombre */
+  .dark-mode,
+  [data-theme='dark'] {
+    --primary: #1a9fd1;
+    --secondary: #ff8a73;
+    --success: #6edb6e;
+    color: var(--text-light);
+    background-color: var(--bg-dark);
+  }
+  
+  .dark-mode .card,
+  [data-theme='dark'] .card {
+    background-color: var(--card-bg-dark);
+    border-color: var(--border-dark);
+    color: var(--text-light);
+  }
+  
+  .dark-mode .modal-content,
+  [data-theme='dark'] .modal-content {
+    background-color: var(--modal-bg-dark);
+    color: var(--text-light);
+    border-color: var(--border-dark);
+  }
+  
+  .dark-mode .form-control,
+  [data-theme='dark'] .form-control {
+    background-color: var(--input-bg-dark);
+    border-color: var(--border-dark);
+    color: var(--text-light);
+  }
+  
+  .dark-mode .form-control:focus,
+  [data-theme='dark'] .form-control:focus {
+    background-color: var(--input-bg-dark);
+    color: var(--text-light);
+  }
+  
+  .dark-mode .modal-header,
+  .dark-mode .modal-footer,
+  [data-theme='dark'] .modal-header,
+  [data-theme='dark'] .modal-footer {
+    border-color: var(--border-dark);
+  }
+  
+  .dark-mode .list-group-item,
+  [data-theme='dark'] .list-group-item {
+    background-color: var(--card-bg-dark);
+    border-color: var(--border-dark);
+    color: var(--text-light);
+  }
+  
+  /* Composants spécifiques */
+  .site-header {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://via.placeholder.com/1600x900/0078a7/ffffff?text=Corse') center/cover no-repeat;;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .day-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+    transition: transform 0.3s ease;
+    border-left: 5px solid var(--primary);
+  }
+  
+  .day-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .dark-mode .day-card,
+  [data-theme='dark'] .day-card {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .day-header {
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .activity-item {
+    border-left: 3px solid var(--secondary);
+    padding: 12px 15px;
+    margin: 10px 0;
+    background-color: rgba(226, 114, 91, 0.1);
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .activity-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark-mode .activity-item,
+  [data-theme='dark'] .activity-item {
+    background-color: rgba(255, 138, 115, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .tag {
+    display: inline-block;
+    background-color: var(--highlight);
+    color: var(--dark);
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .booked {
+    background-color: var(--success);
+    color: white;
+  }
+  
+  .not-booked {
+    background-color: var(--danger);
+    color: white;
+  }
+  
+  .add-activity-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+  }
+  
+  .add-activity-btn:hover {
+    background-color: #006490;
+    color: white;
+  }
+  
+  .auth-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+  
+  .dark-mode .auth-container,
+  [data-theme='dark'] .auth-container {
+    background-color: var(--card-bg-dark);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .footer {
+    margin-top: 50px;
+    padding: 20px 0;
+    background-color: var(--dark);
+    color: white;
+    text-align: center;
+  }
+  
+  .dark-mode .footer,
+  [data-theme='dark'] .footer {
+    background-color: #1a1a1a;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  /* Responsive */
+  @media (max-width: 767.98px) {
+    .site-header {
+      height: 30vh;
+      padding: 15px;
+    }
+    
+    .site-header h1 {
+      font-size: 1.8rem;
+    }
+    
+    .site-header .subtitle {
+      font-size: 1rem;
+    }
+  }

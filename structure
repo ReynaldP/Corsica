@@ -1,0 +1,37 @@
+corsica-trip-planner/
+├── public/
+│   ├── favicon.ico
+│   ├── index.html
+│   └── images/
+│       └── corsica-header.jpg
+├── src/
+│   ├── components/
+│   │   ├── ActivityForm.tsx       # Formulaire d'ajout/édition d'activité
+│   │   ├── ActivityItem.tsx       # Composant pour une activité individuelle
+│   │   ├── BudgetOverview.tsx     # Composant pour l'affichage du budget
+│   │   ├── DayCard.tsx            # Carte pour un jour spécifique
+│   │   ├── FilterBar.tsx          # Barre de filtrage des activités
+│   │   ├── Header.tsx             # En-tête de l'application
+│   │   └── PrivateRoute.tsx       # Composant pour protéger les routes
+│   ├── context/
+│   │   └── AuthContext.tsx        # Contexte pour l'authentification
+│   ├── pages/
+│   │   ├── Dashboard.tsx          # Page principale du tableau de bord
+│   │   ├── HomePage.tsx           # Page d'accueil
+│   │   ├── LoginPage.tsx          # Page de connexion
+│   │   └── NotFoundPage.tsx       # Page 404
+│   ├── services/
+│   │   ├── firebase.ts            # Configuration de Firebase
+│   │   ├── authService.ts         # Service d'authentification
+│   │   └── tripService.ts         # Service pour gérer les données du voyage
+│   ├── types/
+│   │   └── index.ts               # Types TypeScript pour l'application
+│   ├── utils/
+│   │   └── helpers.ts             # Fonctions utilitaires
+│   ├── App.tsx                    # Composant principal de l'application
+│   ├── index.tsx                  # Point d'entrée de l'application
+│   └── styles.css                 # Styles globaux
+├── .env                           # Variables d'environnement
+├── package.json                   # Dépendances et scripts
+├── tsconfig.json                  # Configuration TypeScript
+└── README.md                      # Documentation
