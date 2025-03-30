@@ -1,7 +1,28 @@
 // src/services/tripService.ts
-import { ref, onValue, push, update, remove } from "firebase/database";
+import { ref, onValue, push, update, remove, get, set } from "firebase/database";
 import { db } from "./firebase";
 import { TripData, Activity } from "../types";
+
+// Fonction pour trouver la clé Firebase d'un jour par son ID
+async function findDayKeyById(dayId: string): Promise<string> {
+  console.log("Recherche de la clé Firebase pour le jour:", dayId);
+  const daysRef = ref(db, 'trip/days');
+  const snapshot = await get(daysRef);
+  const days = snapshot.val();
+  
+  if (!days) {
+    throw new Error('Aucune donnée de jours trouvée');
+  }
+  
+  for (const [key, day] of Object.entries(days)) {
+    if ((day as any).id === dayId) {
+      console.log(`Jour ${dayId} trouvé avec la clé Firebase ${key}`);
+      return key;
+    }
+  }
+  
+  throw new Error(`Jour avec l'ID ${dayId} non trouvé`);
+}
 
 // Fonction pour charger les données du voyage avec gestion d'erreur améliorée
 export const loadTripData = (callback: (data: TripData | null) => void) => {
@@ -58,7 +79,12 @@ export const loadTripData = (callback: (data: TripData | null) => void) => {
 export const addActivity = async (dayId: string, activity: Omit<Activity, 'id'>) => {
   try {
     console.log("TripService: Adding activity", { dayId, activity });
-    const activitiesRef = ref(db, `trip/days/${dayId}/activities`);
+    
+    // Trouver la clé Firebase du jour
+    const firebaseDayKey = await findDayKeyById(dayId);
+    
+    // Utiliser la clé Firebase pour le chemin
+    const activitiesRef = ref(db, `trip/days/${firebaseDayKey}/activities`);
     const newActivityRef = push(activitiesRef);
     await update(newActivityRef, activity);
     await updateBudget();
@@ -73,7 +99,12 @@ export const addActivity = async (dayId: string, activity: Omit<Activity, 'id'>)
 export const updateActivity = async (dayId: string, activityId: string, activity: Partial<Activity>) => {
   try {
     console.log("TripService: Updating activity", { dayId, activityId, activity });
-    const activityRef = ref(db, `trip/days/${dayId}/activities/${activityId}`);
+    
+    // Trouver la clé Firebase du jour
+    const firebaseDayKey = await findDayKeyById(dayId);
+    
+    // Utiliser la clé Firebase pour le chemin
+    const activityRef = ref(db, `trip/days/${firebaseDayKey}/activities/${activityId}`);
     await update(activityRef, activity);
     await updateBudget();
     return true;
@@ -87,7 +118,12 @@ export const updateActivity = async (dayId: string, activityId: string, activity
 export const deleteActivity = async (dayId: string, activityId: string) => {
   try {
     console.log("TripService: Deleting activity", { dayId, activityId });
-    const activityRef = ref(db, `trip/days/${dayId}/activities/${activityId}`);
+    
+    // Trouver la clé Firebase du jour
+    const firebaseDayKey = await findDayKeyById(dayId);
+    
+    // Utiliser la clé Firebase pour le chemin
+    const activityRef = ref(db, `trip/days/${firebaseDayKey}/activities/${activityId}`);
     await remove(activityRef);
     await updateBudget();
     return true;
@@ -114,7 +150,7 @@ export const getExpensesByCategory = (): Promise<Record<string, number>> => {
           if (days) {
             // Si days est un tableau
             if (Array.isArray(days)) {
-              days.forEach(day => {
+              days.forEach((day: any) => {
                 if (day.activities) {
                   Object.values(day.activities).forEach((activity: any) => {
                     if (activity.price) {
@@ -189,7 +225,7 @@ export const updateBudget = async (newTotalBudget?: number) => {
             if (days) {
               // Si days est un tableau
               if (Array.isArray(days)) {
-                days.forEach(day => {
+                days.forEach((day: any) => {
                   if (day.activities) {
                     Object.values(day.activities).forEach((activity: any) => {
                       if (activity.price) {
@@ -318,7 +354,19 @@ export const createInitialData = async (): Promise<TripData> => {
   
   try {
     const tripRef = ref(db, 'trip');
-    await update(tripRef, initialData);
+    
+    // Convertir explicitement le tableau days en objet pour Firebase
+    const daysAsObject: Record<string, any> = {};
+    initialData.days.forEach((day, index) => {
+      daysAsObject[index] = day;
+    });
+    
+    const firebaseData = {
+      days: daysAsObject,
+      budget: initialData.budget
+    };
+    
+    await set(tripRef, firebaseData);
     console.log("TripService: Initial data created successfully");
     return initialData;
   } catch (error) {

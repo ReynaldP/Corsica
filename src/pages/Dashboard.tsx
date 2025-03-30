@@ -14,16 +14,16 @@ const Dashboard: React.FC = () => {
   const [tripData, setTripData] = useState<TripData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // État pour le filtrage des activités
   const [filter, setFilter] = useState<FilterType>('all');
-  
+
   // États pour le modal d'activité
   const [showActivityModal, setShowActivityModal] = useState(false);
   const [selectedDayId, setSelectedDayId] = useState<string | null>(null);
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
-  
+
   // État pour l'affichage des statistiques
   const [showStats, setShowStats] = useState(false);
 
@@ -33,17 +33,17 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     let unsubscribe: () => void;
     let isActive = true; // Pour éviter les mises à jour d'état après démontage
-    
+
     const loadData = async () => {
       console.log("Dashboard: Loading trip data");
       setLoading(true);
       setError(null);
-      
+
       try {
         // Mettre en place l'abonnement aux données
         unsubscribe = loadTripData((data) => {
           if (!isActive) return;
-          
+
           console.log("Dashboard: Trip data received", data ? "Data exists" : "No data");
           if (data) {
             setTripData(data);
@@ -72,9 +72,9 @@ const Dashboard: React.FC = () => {
         setLoading(false);
       }
     };
-    
+
     loadData();
-    
+
     // Nettoyage lors du démontage du composant
     return () => {
       console.log("Dashboard: Cleaning up trip data subscription");
@@ -96,21 +96,21 @@ const Dashboard: React.FC = () => {
   const handleEditActivity = (dayId: string, activityId: string) => {
     console.log("Dashboard: Editing activity", { dayId, activityId });
     if (!tripData) return;
-    
+
     // Trouver le jour par ID
     const day = tripData.days.find(d => d.id === dayId);
     if (!day) {
       console.error("Dashboard: Day not found", dayId);
       return;
     }
-    
+
     // Trouver l'activité par ID
     const activity = day.activities[activityId];
     if (!activity) {
       console.error("Dashboard: Activity not found", activityId);
       return;
     }
-    
+
     setSelectedDayId(dayId);
     setSelectedActivityId(activityId);
     setSelectedActivity({ ...activity, id: activityId });
@@ -120,11 +120,11 @@ const Dashboard: React.FC = () => {
   // Filtrer les jours en fonction du filtre sélectionné
   const getFilteredDays = () => {
     if (!tripData) return [];
-    
+
     return tripData.days.map(day => {
       // Vérifier si ce jour doit être affiché selon le filtre actuel
       let display = true;
-      
+
       if (filter === 'booked') {
         // Afficher seulement si le jour a des activités réservées
         display = Object.values(day.activities || {}).some(activity => activity.booked);
@@ -132,9 +132,9 @@ const Dashboard: React.FC = () => {
         // Afficher seulement si le jour a des activités non réservées
         display = Object.values(day.activities || {}).some(activity => !activity.booked);
       }
-      
-      return { 
-        ...day, 
+
+      return {
+        ...day,
         display
       };
     });
@@ -162,8 +162,8 @@ const Dashboard: React.FC = () => {
           <p>{error}</p>
           <hr />
           <p className="mb-0">
-            <button 
-              className="btn btn-outline-danger" 
+            <button
+              className="btn btn-outline-danger"
               onClick={() => window.location.reload()}
             >
               Réessayer
@@ -182,7 +182,7 @@ const Dashboard: React.FC = () => {
           <p>Aucune donnée de voyage disponible. Tentative de création de données initiales...</p>
           <hr />
           <p className="mb-0">
-            <button 
+            <button
               className="btn btn-primary"
               onClick={() => {
                 setLoading(true);
@@ -209,11 +209,11 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className={isDarkMode ? 'dark-mode' : ''}>
-      <Header 
-        title="Découverte de la Corse du Sud" 
-        subtitle="10 jours d'aventures entre mer turquoise et montagnes sauvages" 
+      <Header
+        title="Découverte de la Corse du Sud"
+        subtitle="10 jours d'aventures entre mer turquoise et montagnes sauvages"
       />
-      
+
       <div className="container">
         {/* Filtres et statistiques */}
         <div className="row mb-4">
@@ -228,15 +228,15 @@ const Dashboard: React.FC = () => {
         {/* Bouton pour afficher/masquer les statistiques */}
         <div className="row mb-4">
           <div className="col-12">
-            <button 
-              className="btn btn-outline-primary" 
+            <button
+              className="btn btn-outline-primary"
               onClick={() => setShowStats(!showStats)}
             >
               {showStats ? 'Masquer les statistiques' : 'Afficher les statistiques'}
             </button>
           </div>
         </div>
-        
+
         {/* Section des statistiques (conditionnelle) */}
         {showStats && (
           <div className="row mb-4">
@@ -248,23 +248,23 @@ const Dashboard: React.FC = () => {
 
         {/* Conteneur pour les jours */}
         <div className="row" id="daysContainer">
-          {filteredDays.map((day, index) => (
-            day.display && (
-              <DayCard 
+          {filteredDays
+            .filter(day => day.display) // Filtrer d'abord les jours à afficher
+            .map((day, index) => (
+              <DayCard
                 key={day.id}
-                day={day as Day}
+                day={day}
                 index={index}
                 onAddActivity={handleAddActivity}
                 onEditActivity={handleEditActivity}
               />
-            )
-          ))}
-          
+            ))}
+
           {filteredDays.filter(day => day.display).length === 0 && (
             <div className="col-12 text-center my-5">
               <p>Aucun jour ne correspond au filtre actuel.</p>
-              <button 
-                className="btn btn-primary" 
+              <button
+                className="btn btn-primary"
                 onClick={() => setFilter('all')}
               >
                 Voir tous les jours
@@ -273,10 +273,10 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
-      
+
       {/* Modal pour ajouter/modifier une activité */}
       {showActivityModal && (
-        <ActivityForm 
+        <ActivityForm
           dayId={selectedDayId}
           activity={selectedActivity}
           activityId={selectedActivityId}
