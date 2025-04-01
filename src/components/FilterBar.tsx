@@ -9,7 +9,8 @@ interface FilterBarProps {
 
 const FilterBar: React.FC<FilterBarProps> = ({ currentFilter, setFilter }) => {
   return (
-    <div className="card">
+    // Add filter-bar class here to apply responsive styles
+    <div className="card filter-bar"> 
       <div className="card-body">
         <h5 className="card-title">Filtres</h5>
         <div className="btn-group" role="group">

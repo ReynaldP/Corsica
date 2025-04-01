@@ -286,6 +286,49 @@ body {
 /* Activités */
 .activities-container {
   padding: 5px 0;
+  /* Revert: Remove overflow and min-height */
+}
+
+/* Drag and Drop styles */
+.activities-list {
+  min-height: 50px;
+}
+
+.draggable-activity {
+  margin-bottom: 10px;
+  transition: background-color 0.2s ease;
+  position: relative;
+}
+
+.draggable-activity::before {
+  content: '☰';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  opacity: 0.5;
+  font-size: 16px;
+  cursor: grab;
+  z-index: 10;
+  transition: opacity 0.2s ease;
+}
+
+.draggable-activity:hover::before {
+  opacity: 1;
+}
+
+.draggable-activity.is-dragging {
+  background-color: rgba(244, 211, 94, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 100;
+}
+
+.dark-mode .draggable-activity.is-dragging,
+[data-theme='dark'] .draggable-activity.is-dragging {
+  background-color: rgba(244, 211, 94, 0.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .activity-item {
@@ -514,51 +557,74 @@ body {
   animation: pulseHighlight 2s infinite;
 }
 
-/* Responsive */
-@media (max-width: 991.98px) {
-  .day-card-container {
-    width: 100%;
-  }
-}
+/* Responsive - Mobile First Approach */
 
-@media (max-width: 767.98px) {
-  .site-header {
-    height: 35vh;
-    padding: 15px;
-  }
-  
-  .site-header h1 {
-    font-size: 1.8rem;
-  }
-  
-  .site-header .subtitle {
-    font-size: 1rem;
-  }
-  
-  .auth-container {
-    margin: 50px auto;
-    padding: 20px;
-  }
-}
+/* Base styles are mobile styles */
 
-@media (max-width: 575.98px) {
-  .day-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .day-header > div {
-    margin-top: 10px;
-  }
-  
+/* Tablet Styles (e.g., > 576px) */
+@media (min-width: 576px) {
   .filter-bar .btn-group {
-    width: 100%;
-    display: flex;
+    width: auto; /* Reset width */
+    display: inline-flex; /* Align buttons horizontally */
   }
   
   .filter-bar .btn {
-    flex: 1;
+    flex: none; /* Reset flex grow */
   }
+  
+  .day-header {
+    flex-direction: row; /* Align items horizontally */
+    align-items: center; /* Center vertically */
+  }
+  
+  .day-header > div {
+    margin-top: 0; /* Remove top margin */
+  }
+}
+
+/* Medium Desktop Styles (e.g., > 768px) */
+@media (min-width: 768px) {
+  .site-header {
+    height: 40vh; /* Slightly taller header */
+    padding: 20px;
+  }
+  
+  .site-header h1 {
+    font-size: 2.2rem; /* Larger title */
+  }
+  
+  .site-header .subtitle {
+    font-size: 1.1rem; /* Larger subtitle */
+  }
+  
+  .auth-container {
+    margin: 80px auto; /* More vertical margin */
+    padding: 25px;
+  }
+}
+
+/* Large Desktop Styles (e.g., > 992px) */
+@media (min-width: 992px) {
+  /* Styles for larger screens, if any specific overrides are needed */
+  /* Example: Maybe increase font sizes further or adjust layout */
+   .site-header {
+    height: 45vh; /* Back to original desktop height */
+  }
+   .site-header h1 {
+    font-size: 2.5rem; /* Back to original desktop size */
+  }
+  .site-header .subtitle {
+    font-size: 1.2rem; /* Back to original desktop size */
+  }
+   .auth-container {
+    margin: 100px auto; /* Back to original desktop margin */
+    padding: 30px; /* Back to original desktop padding */
+  }
+}
+
+/* Extra Large Desktop Styles (e.g., > 1200px) */
+@media (min-width: 1200px) {
+  /* Styles for very large screens */
 }
 
 /* Spécificités du mode "Corse" */
@@ -600,4 +666,236 @@ body {
   background-size: 80px 80px;
   background-position: center;
   background-repeat: no-repeat;
+}
+/* Ajoutez ces styles à votre fichier src/styles.css */
+
+/* Styles pour la barre de progression du budget */
+.budget-progress-container {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.progress {
+  height: 15px;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustement pour les textes dans les barres de progression */
+.progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  transition: width 0.6s ease;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation de la barre de progression */
+@keyframes progressAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Style pour la légende des dépenses */
+.budget-legend {
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.budget-legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.budget-legend-color {
+  width: 12px;
+  height: 12px;
+  margin-right: 0.5rem;
+  border-radius: 2px;
+}
+
+.budget-legend-color.booked {
+  background-color: var(--success);
+}
+
+.budget-legend-color.unbooked {
+  background-color: var(--danger);
+}
+
+/* Mode sombre */
+.dark-mode .progress {
+  background-color: #2d3035;
+}
+
+/* Animation de surbrillance quand le budget est dépassé */
+.budget-warning .progress {
+  animation: budgetWarningPulse 2s infinite;
+}
+
+@keyframes budgetWarningPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
+}
+
+.budget-overflow .progress {
+  animation: budgetOverflowPulse 2s infinite;
+}
+
+@keyframes budgetOverflowPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(220, 53, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+  }
+}
+/* Styles pour la carte et les marqueurs - Ajoutez ceci à votre styles.css */
+
+/* Conteneur de la carte */
+.trip-map-container {
+  position: relative;
+}
+
+/* Styles pour le marqueur personnalisé du jour */
+.custom-day-icon .day-marker {
+  background-color: var(--primary);
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+}
+
+/* Ajustement des popups Leaflet */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px;
+  min-width: 200px;
+}
+
+.leaflet-popup-content h6 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Styles pour le panneau de recherche à proximité */
+.nearby-places-panel {
+  height: 500px;
+  overflow-y: auto;
+}
+
+.nearby-places-panel .list-group {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.nearby-places-panel .list-group-item {
+  padding: 10px 15px;
+  transition: all 0.2s ease;
+}
+
+.nearby-places-panel .list-group-item:hover {
+  background-color: rgba(0, 120, 167, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Style pour le cercle de recherche */
+.leaflet-interactive {
+  transition: all 0.3s ease;
+}
+
+/* Mode sombre pour la carte */
+.dark-mode .leaflet-popup-content-wrapper,
+.dark-mode .leaflet-popup-tip,
+[data-theme='dark'] .leaflet-popup-content-wrapper,
+[data-theme='dark'] .leaflet-popup-tip {
+  background-color: var(--modal-bg-dark);
+  color: var(--text-light);
+}
+
+.dark-mode .leaflet-popup-content h6,
+[data-theme='dark'] .leaflet-popup-content h6 {
+  color: var(--primary);
+}
+
+/* Animations */
+@keyframes markerPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.marker-highlight {
+  animation: markerPulse 1.5s infinite;
+}
+
+/* Styles for Mobile Swipe Indicators */
+.swipe-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--granite); /* Use a neutral color */
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.swipe-indicator.active {
+  background-color: var(--primary); /* Highlight active dot */
+  transform: scale(1.2);
+}
+
+.dark-mode .swipe-indicator,
+[data-theme='dark'] .swipe-indicator {
+  background-color: var(--text-muted);
+}
+
+.dark-mode .swipe-indicator.active,
+[data-theme='dark'] .swipe-indicator.active {
+  background-color: var(--primary); /* Keep primary for active in dark mode */
 }

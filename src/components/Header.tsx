@@ -28,10 +28,36 @@ const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
       <h1>{title}</h1>
       {subtitle && <p className="subtitle">{subtitle}</p>}
       
-      <div className="mt-3 d-flex justify-content-between w-100">
-        <div>
+      {/* Navigation menu */}
+      {currentUser && (
+        <nav className="mt-2 mb-3">
+          <ul className="nav nav-pills">
+            <li className="nav-item">
+              <button 
+                className={`nav-link ${window.location.pathname === '/dashboard' ? 'active' : 'text-light'}`}
+                onClick={() => navigate('/dashboard')}
+              >
+                Tableau de bord
+              </button>
+            </li>
+            <li className="nav-item">
+              <button 
+                className={`nav-link ${window.location.pathname === '/checklist' ? 'active' : 'text-light'}`}
+                onClick={() => navigate('/checklist')}
+              >
+                Checklist
+              </button>
+            </li>
+          </ul>
+        </nav>
+      )}
+      
+      {/* Stack vertically on xs, row on sm+, align center vertically */}
+      <div className="mt-3 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center w-100">
+        {/* Add margin bottom for stacked view */}
+        <div className="mb-2 mb-sm-0"> 
           {currentUser && (
-            <span className="text-light me-3">
+            <span className="text-light me-sm-3"> {/* Adjust margin for sm+ */}
               Connecté en tant que: {currentUser.email}
             </span>
           )}

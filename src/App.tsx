@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ChecklistPage from './pages/ChecklistPage';
 import { onAuthStateChange } from './services/authService';
 import './styles.css';
 
@@ -46,6 +47,7 @@ const App: React.FC = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <LoginPage />} />
             <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+            <Route path="/checklist" element={user ? <ChecklistPage /> : <Navigate to="/login" />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Router>
